@@ -106,6 +106,7 @@ data "aws_iam_policy_document" "codebuild" {
     effect = "Allow"
 
     actions = [
+      "codebuild:BatchGetProjects",
       "codebuild:DeleteProject",
       "codebuild:DeleteWebhook",
       "codebuild:UpdateProject",
@@ -119,17 +120,16 @@ data "aws_iam_policy_document" "codebuild" {
   }
 
   statement {
-    sid = "AllowToListCodebuildProject"
+    sid = "AllowToListCodebuildProjects"
 
     effect = "Allow"
 
     actions = [
-      "codebuild:BatchGetProjects",
       "codebuild:ListProjects",
     ]
 
     resources = [
-      "arn:aws:codebuild:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:project/${var.product_domain}*",
+      "*",
     ]
   }
 
