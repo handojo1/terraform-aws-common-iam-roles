@@ -106,7 +106,6 @@ data "aws_iam_policy_document" "codebuild" {
     effect = "Allow"
 
     actions = [
-      "codebuild:BatchGetProjects",
       "codebuild:DeleteProject",
       "codebuild:DeleteWebhook",
       "codebuild:UpdateProject",
@@ -120,11 +119,12 @@ data "aws_iam_policy_document" "codebuild" {
   }
 
   statement {
-    sid = "AllowToListCodebuildProjects"
+    sid = "AllowToListCodebuildProject"
 
     effect = "Allow"
 
     actions = [
+      "codebuild:BatchGetProjects",
       "codebuild:ListProjects",
     ]
 
