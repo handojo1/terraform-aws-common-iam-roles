@@ -14,6 +14,7 @@ data "aws_iam_policy_document" "codepipeline" {
 
     resources = [
       "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/service-role/codepipeline.amazonaws.com/ServiceRoleForCodepipeline_${var.product_domain}*",
+      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/service-role/events.amazonaws.com/ServiceRoleForEvents_${var.product_domain}*",
     ]
   }
 
@@ -151,17 +152,51 @@ data "aws_iam_policy_document" "codebuild" {
   }
 
   statement {
-    sid = "AllowToGetEventRule"
+    sid = "AllowToManageEventRule"
 
     effect = "Allow"
 
     actions = [
+      "events:DescribeRule",
+      "events:DeleteRule",
+      "events:EnableRule",
+      "events:ListTargetsByRule",
+      "events:PutRule",
+      "events:PutTargets",
+      "events:RemoveTargets",
       "events:ListRuleNamesByTarget",
     ]
 
     resources = [
-      "arn:aws:events:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:*",
+      "arn:aws:events:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:rule/${var.product_domain}*",
     ]
+
+    condition = {
+      test     = "StringLikeIfExists"
+      variable = "events:TargetArn"
+
+      values = [
+        "arn:aws:codepipeline:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${var.product_domain}*",
+      ]
+    }
+
+    condition = {
+      test     = "StringEqualsIfExists"
+      variable = "events:source"
+
+      values = [
+        "aws.s3",
+      ]
+    }
+
+    condition = {
+      test     = "StringEqualsIfExists"
+      variable = "events:detail-type"
+
+      values = [
+        "AWS API Call via CloudTrail",
+      ]
+    }
   }
 
   statement {
