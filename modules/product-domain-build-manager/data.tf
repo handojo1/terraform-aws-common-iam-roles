@@ -109,6 +109,7 @@ data "aws_iam_policy_document" "codebuild" {
       "codebuild:DeleteWebhook",
       "codebuild:UpdateProject",
       "codebuild:UpdateWebhook",
+      "codebuild:InvalidateProjectCache",
     ]
 
     resources = [
@@ -127,7 +128,7 @@ data "aws_iam_policy_document" "codebuild" {
     ]
 
     resources = [
-      "*",
+      "arn:aws:codebuild:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:project/${var.product_domain}*",
     ]
   }
 
