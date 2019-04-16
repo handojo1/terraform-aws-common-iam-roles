@@ -477,7 +477,6 @@ data "aws_iam_policy_document" "snapshot" {
     effect = "Allow"
 
     actions = [
-      "ec2:DescribeSnapshots",
       "ec2:DeleteSnapshot",
     ]
 
@@ -493,5 +492,18 @@ data "aws_iam_policy_document" "snapshot" {
         "${var.product_domain}",
       ]
     }
+  }
+
+  statement {
+    sid    = "AllowToDescribeSnapshot"
+    effect = "Allow"
+
+    actions = [
+      "ec2:DescribeSnapshots",
+    ]
+
+    resources = [
+      "*",
+    ]
   }
 }
