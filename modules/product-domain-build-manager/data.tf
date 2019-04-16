@@ -470,3 +470,28 @@ data "aws_iam_policy_document" "ami" {
     ]
   }
 }
+
+data "aws_iam_policy_document" "snapshot" {
+  statement {
+    sid    = "AllowToDeleteSnapshot"
+    effect = "Allow"
+
+    actions = [
+      "ec2:DescribeSnapshots",
+      "ec2:DeleteSnapshot",
+    ]
+
+    resources = [
+      "arn:aws:ec2:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:snapshot/*",
+    ]
+
+    condition = {
+      test     = "StringEquals"
+      variable = "ec2:ResourceTag/ProductDomain"
+
+      values = [
+        "${var.product_domain}",
+      ]
+    }
+  }
+}
