@@ -160,6 +160,7 @@ data "aws_iam_policy_document" "codebuild" {
       "events:DescribeRule",
       "events:DeleteRule",
       "events:EnableRule",
+      "events:ListTagsForResource",
       "events:ListTargetsByRule",
       "events:PutRule",
       "events:PutTargets",
