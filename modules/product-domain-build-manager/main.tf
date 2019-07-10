@@ -51,3 +51,9 @@ resource "aws_iam_role_policy" "pdbm_ami" {
   role   = "${module.this.role_name}"
   policy = "${data.aws_iam_policy_document.ami.json}"
 }
+
+resource "aws_iam_role_policy" "pdbm_snapshot" {
+  name   = "AllowToDeleteSnapshot"
+  role   = "${module.this.role_name}"
+  policy = "${data.aws_iam_policy_document.snapshot.json}"
+}

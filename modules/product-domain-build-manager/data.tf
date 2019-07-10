@@ -46,6 +46,7 @@ data "aws_iam_policy_document" "codepipeline" {
       "codepipeline:ListPipelineExecutions",
       "codepipeline:StartPipelineExecution",
       "codepipeline:UpdatePipeline",
+      "codepipeline:ListTagsForResource",
     ]
 
     resources = [
@@ -160,6 +161,7 @@ data "aws_iam_policy_document" "codebuild" {
       "events:DescribeRule",
       "events:DeleteRule",
       "events:EnableRule",
+      "events:ListTagsForResource",
       "events:ListTargetsByRule",
       "events:PutRule",
       "events:PutTargets",
@@ -363,6 +365,8 @@ data "aws_iam_policy_document" "s3" {
 
     actions = [
       "s3:ListAllMyBuckets",
+      "s3:ListBucket",
+      "s3:GetObject",
     ]
 
     resources = [
@@ -463,6 +467,43 @@ data "aws_iam_policy_document" "ami" {
       "ec2:DescribeImages",
       "ec2:DescribeTags",
       "ec2:DeregisterImage",
+    ]
+
+    resources = [
+      "*",
+    ]
+  }
+}
+
+data "aws_iam_policy_document" "snapshot" {
+  statement {
+    sid    = "AllowToDeleteSnapshot"
+    effect = "Allow"
+
+    actions = [
+      "ec2:DeleteSnapshot",
+    ]
+
+    resources = [
+      "arn:aws:ec2:${data.aws_region.current.name}::snapshot/*",
+    ]
+
+    condition = {
+      test     = "StringEquals"
+      variable = "ec2:ResourceTag/ProductDomain"
+
+      values = [
+        "${var.product_domain}",
+      ]
+    }
+  }
+
+  statement {
+    sid    = "AllowToDescribeSnapshot"
+    effect = "Allow"
+
+    actions = [
+      "ec2:DescribeSnapshots",
     ]
 
     resources = [
