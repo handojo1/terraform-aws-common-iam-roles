@@ -47,6 +47,7 @@ data "aws_iam_policy_document" "codepipeline" {
       "codepipeline:StartPipelineExecution",
       "codepipeline:UpdatePipeline",
       "codepipeline:ListTagsForResource",
+      "codepipeline:TagResource",
     ]
 
     resources = [
