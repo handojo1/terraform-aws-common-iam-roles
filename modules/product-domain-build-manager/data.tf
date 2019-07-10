@@ -46,6 +46,7 @@ data "aws_iam_policy_document" "codepipeline" {
       "codepipeline:ListPipelineExecutions",
       "codepipeline:StartPipelineExecution",
       "codepipeline:UpdatePipeline",
+      "codepipeline:ListTagsForResource",
     ]
 
     resources = [
@@ -364,6 +365,8 @@ data "aws_iam_policy_document" "s3" {
 
     actions = [
       "s3:ListAllMyBuckets",
+      "s3:ListBucket",
+      "s3:GetObject",
     ]
 
     resources = [
